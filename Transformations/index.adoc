@@ -19,9 +19,7 @@ directly:
 [source]
 ----
 rotatedPoint =
-    Point2d.rotateAround Point2d.origin
-        (degrees 45)
-        originalPoint
+    Point2d.rotateAround Point2d.origin angle originalPoint
 ----
 
 This has many advantages. First, partial function application means that
