@@ -1,4 +1,11 @@
-# Transformations
+= Transformations
+Ian Mackenzie
+:source-highlighter: highlight.js
+:highlightjs-theme: github-gist
+:highlightjsdir: ../highlight
+:source-language: elm
+
+== Introduction
 
 Many OpenSolid functions deal with different kinds of transformations -
 translations, rotations, scalings, mirrors, and projections. Unlike most other
@@ -8,16 +15,18 @@ functions to create transformation matrices which can then later be applied to
 values, transformations in OpenSolid are just functions that can be used
 directly:
 
-```elm
+[source]
+----
 rotatedPoint =
     Point2d.rotateAround Point2d.origin (degrees 45) originalPoint
-```
+----
 
 This has many advantages. First, partial function application means that
 transformations can be directly used with higher-order functions like
 `List.map`:
 
-```elm
+[source]
+----
 pointsOnXAxis =
     [ Point2d ( 1, 0 )
     , Point2d ( 2, 0 )
@@ -36,13 +45,14 @@ pointsOnYAxis ==
     , Point2d ( 0, 2 )
     , Point2d ( 0, 3 )
     ]
-```
+----
 
 Second, transformations can be composed like any other functions to produce
 composite transformations (no more having to remember multiplication order of
 matrices!):
 
-```elm
+[source]
+----
 rotateThenScale : Point2d -> Point2d
 rotateThenScale =
     Point2d.rotateAround Point2d.origin (degrees 90)
@@ -53,7 +63,7 @@ rotateThenScale (Point2d ( 1, 0 )) ==
 
 rotateThenScale (Point2d ( 0, 2 )) ==
     Point2d ( -3, 0 )
-```
+----
 
 (Yes, in this particular case it doesn't actually matter whether you rotate
 first and then scale or the other way around, but you get the idea.)
@@ -67,39 +77,41 @@ applying the same transformation on its components. For example, rotating a
 `Frame3d` is equivalent to rotating its origin point and basis directions and
 then constructing a new frame from the rotated values.
 
-## Scaling
+== Scaling
 
 Scaling works the same way in both 2D and 3D. Various modules include
 `scaleAbout` functions which all accept the same arguments in the same order: a
 point to scale about, a value to scale by, and finally the value to scale:
 
-```elm
+[source]
+----
 lineSegment =
     LineSegment2d ( Point2d ( 1, 1 ), Point2d ( 3, 2 ) )
 
 LineSegment2d.scaleAbout (Point2d ( 1, 1 )) 2 lineSegment ==
     LineSegment2d ( Point2d ( 1, 1 ), Point2d ( 5, 3 ) )
-```
+----
 
 The point to scale about remains fixed, and all other points expand away from it
 or contract towards it depending on the given scale.
 
-## Translation
+== Translation
 
 Translation also works the same way in both 2D and 3D - `translateBy` functions
 all take a single vector argument specifying the displacement to translate by,
 and then the value to translate:
 
-```elm
+[source]
+----
 axis =
     Axis2d { originPoint = Point2d ( 2, 3 ), direction = Direction2d.x }
 
 Axis2d.translateBy (Vector2d ( 1, 2 )) axis ==
     Axis2d { originPoint = Point2d ( 3, 5 ), direction = Direction2d.x }
-```
+----
 
-## Rotation
+== Rotation
 
-## Mirroring
+== Mirroring
 
-## Projection
+== Projection
