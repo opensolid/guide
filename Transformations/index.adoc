@@ -4,6 +4,7 @@ Ian Mackenzie
 :highlightjs-theme: github-gist
 :highlightjsdir: ../highlight
 :source-language: elm
+:toc: left
 
 == Introduction
 
