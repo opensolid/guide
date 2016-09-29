@@ -1,10 +1,6 @@
 = Transformations
 Ian Mackenzie
-:source-highlighter: highlight.js
-:highlightjs-theme: github-gist
-:highlightjsdir: ../highlight
-:source-language: elm
-:toc: left
+include::../common.adoc[]
 
 == Introduction
 

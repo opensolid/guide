@@ -1,0 +1,5 @@
+:source-highlighter: highlight.js
+:highlightjs-theme: github-gist
+:highlightjsdir: ../highlight
+:source-language: elm
+:toc: left
