@@ -4,7 +4,7 @@ include::../common.adoc[]
 
 == Introduction
 
-Many OpenSolid functions deal with different kinds of transformations -
+Many OpenSolid functions deal with different kinds of transformations --
 translations, rotations, scalings, mirrors, and projections. Unlike most other
 geometric libraries, however, OpenSolid does not use matrices to define
 transformations (in fact, matrices are not used anywhere). Instead of having
@@ -114,7 +114,7 @@ or contract towards it depending on the given scale.
 
 == Translation
 
-Translation also works the same way in both 2D and 3D - `translateBy` functions
+Translation also works the same way in both 2D and 3D -- `translateBy` functions
 all take a single vector argument specifying the displacement to translate by,
 and then the value to translate:
 
