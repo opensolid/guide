@@ -1,0 +1,21 @@
+{
+    "version": "1.0.0",
+    "summary": "OpenSolid guides",
+    "repository": "https://github.com/opensolid/guides.git",
+    "license": "MPL-2.0",
+    "source-directories": [
+        ".",
+        "../core/src",
+        "../geometry/src",
+        "../svg/src",
+        "../../kintail/input-widget/src"
+    ],
+    "exposed-modules": [],
+    "dependencies": {
+        "elm-community/basics-extra": "1.2.0 <= v < 2.0.0",
+        "elm-lang/core": "4.0.5 <= v < 5.0.0",
+        "elm-lang/html": "1.1.0 <= v < 2.0.0",
+        "elm-lang/svg": "1.1.1 <= v < 2.0.0"
+    },
+    "elm-version": "0.17.0 <= v < 0.18.0"
+}
