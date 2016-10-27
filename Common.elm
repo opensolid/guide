@@ -13,7 +13,7 @@ module Common
 import Html exposing (Html)
 import Svg exposing (Svg)
 import Svg.Attributes as Attributes
-import OpenSolid.Core.Types exposing (..)
+import OpenSolid.Geometry.Types exposing (..)
 import OpenSolid.Geometry.Types exposing (..)
 import OpenSolid.Direction2d as Direction2d
 import OpenSolid.Point2d as Point2d

@@ -4,7 +4,7 @@ import Html exposing (Html)
 import Html.Attributes as Html
 import Html.App as Html
 import Common exposing (..)
-import OpenSolid.Core.Types exposing (..)
+import OpenSolid.Geometry.Types exposing (..)
 import OpenSolid.Geometry.Types exposing (..)
 import OpenSolid.Frame2d as Frame2d
 import OpenSolid.Triangle2d as Triangle2d
