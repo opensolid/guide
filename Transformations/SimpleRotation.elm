@@ -1,4 +1,4 @@
-module SimpleRotation exposing (..)
+module Transformations.SimpleRotation exposing (..)
 
 import Html exposing (Html)
 import Html.Attributes as Html
