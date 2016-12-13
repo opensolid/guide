@@ -1,6 +1,7 @@
 module Common
     exposing
-        ( Color(..)
+        ( pixelsPerUnit
+        , Color(..)
         , scene2d
         , point2d
         , centerPoint2d
@@ -26,7 +27,7 @@ import OpenSolid.Svg as Svg
 
 
 config =
-    { scale = 75
+    { scale = 75.0
     , stroke =
         { width = 0.02
         , thinWidth = 0.01
@@ -47,6 +48,11 @@ config =
         , tipWidth = 0.1
         }
     }
+
+
+pixelsPerUnit : Float
+pixelsPerUnit =
+    config.scale
 
 
 type Color
