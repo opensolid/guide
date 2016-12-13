@@ -2,7 +2,6 @@ module SimpleRotation exposing (..)
 
 import Html exposing (Html)
 import Html.Attributes as Html
-import Html.App as Html
 import Common exposing (..)
 import OpenSolid.Geometry.Types exposing (..)
 import OpenSolid.Geometry.Types exposing (..)
@@ -55,7 +54,7 @@ view angle =
             ]
 
 
-main : Program Never
+main : Program Never Float Float
 main =
     Html.beginnerProgram
         { model = 15
