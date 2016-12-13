@@ -4,6 +4,7 @@ module Common
         , scene2d
         , point2d
         , centerPoint2d
+        , originPoint2d
         , direction2d
         , frame2d
         , lineSegment2d
