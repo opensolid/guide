@@ -193,7 +193,7 @@ direction2d color basePoint direction =
             Point2d ( stemLength, -config.direction.tipWidth / 2 )
 
         stem =
-            LineSegment2d ( basePoint, stemPoint )
+            LineSegment2d ( Point2d.origin, stemPoint )
 
         tip =
             Triangle2d ( tipPoint, leftPoint, rightPoint )
