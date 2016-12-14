@@ -10,10 +10,12 @@ import OpenSolid.Frame2d as Frame2d
 import OpenSolid.Vector2d as Vector2d
 import OpenSolid.Direction2d as Direction2d
 import OpenSolid.Axis2d as Axis2d
+import OpenSolid.BoundingBox2d as BoundingBox2d
 import OpenSolid.Svg as Svg
 import Common exposing (..)
 import Mouse
 import Json.Decode as Decode
+import Formatting as Format exposing (Format, (<>))
 
 
 type DraggedObject
@@ -169,22 +171,17 @@ actualFrame model =
 formatFloat : Float -> String
 formatFloat value =
     let
-        rawString =
-            toString value
-
-        decimalIndex =
-            String.indexes "." rawString |> List.head
+        printResult =
+            Format.print (Format.roundTo 2) value
     in
-        case decimalIndex of
-            Just index ->
-                String.slice 0 (index + 3) rawString
-
-            Nothing ->
-                rawString
+        if value < 0.0 && (not (String.startsWith "-" printResult)) then
+            "-" ++ printResult
+        else
+            printResult
 
 
-coordinates : Point2d -> String
-coordinates point =
+coordinatesString : Point2d -> String
+coordinatesString point =
     let
         ( x, y ) =
             Point2d.coordinates point
@@ -238,6 +235,35 @@ view model =
 
         ( localX, localY ) =
             Point2d.coordinates relativePoint
+
+        coordinateLabel point color =
+            let
+                ( x, y ) =
+                    Point2d.coordinates point
+
+                offset =
+                    0.1
+
+                ( anchorX, anchorType ) =
+                    if x <= BoundingBox2d.midX boundingBox then
+                        ( x + offset, "start" )
+                    else
+                        ( x - offset, "end" )
+
+                mirrorAxis =
+                    Axis2d { originPoint = point, direction = Direction2d.x }
+            in
+                Svg.mirrorAcross mirrorAxis
+                    (Svg.text_
+                        [ Svg.Attributes.x (toString anchorX)
+                        , Svg.Attributes.textAnchor anchorType
+                        , Svg.Attributes.y (toString y)
+                        , Svg.Attributes.fontSize "0.2"
+                        , Svg.Attributes.fill (colorString color)
+                        , noSelectAttribute
+                        ]
+                        [ Svg.text (coordinatesString point) ]
+                    )
     in
         Html.div []
             [ scene2d boundingBox
@@ -252,24 +278,12 @@ view model =
                     , Svg.g [ onMouseDown (DragStart Point) ]
                         [ point2d Orange currentPoint ]
                     ]
-                , Svg.mirrorAcross
-                    (Axis2d
-                        { originPoint = currentPoint
-                        , direction = Direction2d.x
-                        }
-                    )
-                    (Svg.text_
-                        [ Svg.Attributes.x (toString globalX)
-                        , Svg.Attributes.y (toString globalY)
-                        , Svg.Attributes.fontSize "0.2"
-                        , noSelectAttribute
-                        ]
-                        [ Svg.text (coordinates currentPoint) ]
-                    )
+                , coordinateLabel currentPoint Black
                 ]
             , scene2d boundingBox
                 [ frame2d Blue Frame2d.xy
                 , point2d Orange relativePoint
+                , coordinateLabel relativePoint Blue
                 ]
             ]
 
