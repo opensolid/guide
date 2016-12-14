@@ -2,6 +2,7 @@ module Common
     exposing
         ( pixelsPerUnit
         , Color(..)
+        , colorString
         , scene2d
         , point2d
         , centerPoint2d
