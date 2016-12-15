@@ -201,6 +201,31 @@ noSelectAttribute =
         )
 
 
+coordinateLines : Point2d -> Axis2d -> Color -> Svg msg
+coordinateLines point referenceAxis color =
+    let
+        axisOrigin =
+            Axis2d.originPoint referenceAxis
+
+        projectedPoint =
+            Point2d.projectOnto referenceAxis point
+
+        parallelSegment =
+            LineSegment2d ( axisOrigin, projectedPoint )
+
+        perpendicularSegment =
+            LineSegment2d ( projectedPoint, point )
+    in
+        Svg.g
+            [ Svg.Attributes.stroke (colorString color)
+            , Svg.Attributes.strokeWidth "0.01"
+            , Svg.Attributes.strokeDasharray "0.03 0.03"
+            ]
+            [ Svg.lineSegment2d [] parallelSegment
+            , Svg.lineSegment2d [] perpendicularSegment
+            ]
+
+
 view : Model -> Html Msg
 view model =
     let
@@ -267,7 +292,9 @@ view model =
     in
         Html.div []
             [ scene2d viewBox
-                [ frame2d Black Frame2d.xy
+                [ coordinateLines currentPoint (Frame2d.xAxis currentFrame) Blue
+                , coordinateLines currentPoint Axis2d.x Black
+                , frame2d Black Frame2d.xy
                 , Svg.g [ Svg.Attributes.cursor "move" ]
                     [ Svg.g [ onMouseDown (DragStart XDirection) ]
                         [ direction2d Blue originPoint xDirection ]
@@ -281,7 +308,8 @@ view model =
                 , coordinateLabel currentPoint Black
                 ]
             , scene2d viewBox
-                [ frame2d Blue Frame2d.xy
+                [ coordinateLines relativePoint Axis2d.x Blue
+                , frame2d Blue Frame2d.xy
                 , point2d Orange relativePoint
                 , coordinateLabel relativePoint Blue
                 ]
