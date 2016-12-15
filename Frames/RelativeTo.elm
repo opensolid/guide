@@ -15,7 +15,7 @@ import OpenSolid.Svg as Svg
 import Common exposing (..)
 import Mouse
 import Json.Decode as Decode
-import Formatting as Format exposing (Format, (<>))
+import Formatting exposing (Format, (<>))
 
 
 type DraggedObject
@@ -172,7 +172,7 @@ formatFloat : Float -> String
 formatFloat value =
     let
         printResult =
-            Format.print (Format.roundTo 2) value
+            Formatting.print (Formatting.roundTo 2) value
     in
         if value < 0.0 && (not (String.startsWith "-" printResult)) then
             "-" ++ printResult
