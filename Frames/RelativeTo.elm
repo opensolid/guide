@@ -97,26 +97,26 @@ actualPoint model =
 
 
 rotatedFrame : Frame2d -> Point2d -> Point2d -> Frame2d
-rotatedFrame baseFrame dragStart dragEnd =
+rotatedFrame frame dragStartPoint dragEndPoint =
     let
-        baseOrigin =
-            Frame2d.originPoint baseFrame
+        originPoint =
+            Frame2d.originPoint frame
 
         startDirection =
-            Vector2d.direction (Point2d.vectorFrom baseOrigin dragStart)
+            Vector2d.direction (Point2d.vectorFrom originPoint dragStartPoint)
 
         endDirection =
-            Vector2d.direction (Point2d.vectorFrom baseOrigin dragEnd)
+            Vector2d.direction (Point2d.vectorFrom originPoint dragEndPoint)
 
         rotationAngle =
             Maybe.map2 Direction2d.angleFrom startDirection endDirection
     in
         case rotationAngle of
             Just angle ->
-                Frame2d.rotateBy angle baseFrame
+                Frame2d.rotateBy angle frame
 
             Nothing ->
-                baseFrame
+                frame
 
 
 actualFrame : Model -> Frame2d
