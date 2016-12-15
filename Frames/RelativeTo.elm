@@ -204,7 +204,7 @@ noSelectAttribute =
 view : Model -> Html Msg
 view model =
     let
-        boundingBox =
+        viewBox =
             BoundingBox2d
                 { minX = -0.75
                 , minY = -1
@@ -245,7 +245,7 @@ view model =
                     0.1
 
                 ( anchorX, anchorType ) =
-                    if x <= BoundingBox2d.midX boundingBox then
+                    if x <= BoundingBox2d.midX viewBox then
                         ( x + offset, "start" )
                     else
                         ( x - offset, "end" )
@@ -266,7 +266,7 @@ view model =
                     )
     in
         Html.div []
-            [ scene2d boundingBox
+            [ scene2d viewBox
                 [ frame2d Black Frame2d.xy
                 , Svg.g [ Svg.Attributes.cursor "move" ]
                     [ Svg.g [ onMouseDown (DragStart XDirection) ]
@@ -280,7 +280,7 @@ view model =
                     ]
                 , coordinateLabel currentPoint Black
                 ]
-            , scene2d boundingBox
+            , scene2d viewBox
                 [ frame2d Blue Frame2d.xy
                 , point2d Orange relativePoint
                 , coordinateLabel relativePoint Blue
