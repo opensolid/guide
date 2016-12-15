@@ -52,8 +52,8 @@ init =
             Point2d ( 1.5, 0.5 )
 
         initialFrame =
-            Frame2d.at (Point2d ( 1, 1 ))
-                |> Frame2d.rotateBy (degrees 60)
+            Frame2d.at (Point2d ( 0.75, 0.75 ))
+                |> Frame2d.rotateBy (degrees 30)
 
         initialModel =
             { point = initialPoint
