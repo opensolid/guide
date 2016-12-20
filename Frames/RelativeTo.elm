@@ -169,15 +169,8 @@ actualFrame model =
 
 
 formatFloat : Float -> String
-formatFloat value =
-    let
-        printResult =
-            Formatting.print (Formatting.roundTo 2) value
-    in
-        if value < 0.0 && (not (String.startsWith "-" printResult)) then
-            "-" ++ printResult
-        else
-            printResult
+formatFloat =
+    Formatting.print (Formatting.roundTo 2)
 
 
 coordinatesString : Point2d -> String
