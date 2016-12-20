@@ -13,9 +13,9 @@ import OpenSolid.Axis2d as Axis2d
 import OpenSolid.BoundingBox2d as BoundingBox2d
 import OpenSolid.Svg as Svg
 import Common exposing (..)
+import Frames.Common exposing (..)
 import Mouse
 import Json.Decode as Decode
-import Formatting exposing (Format, (<>))
 
 
 type DraggedObject
@@ -168,57 +168,6 @@ actualFrame model =
             model.frame
 
 
-formatFloat : Float -> String
-formatFloat =
-    Formatting.print (Formatting.roundTo 2)
-
-
-coordinatesString : Point2d -> String
-coordinatesString point =
-    let
-        ( x, y ) =
-            Point2d.coordinates point
-    in
-        "(" ++ formatFloat x ++ ", " ++ formatFloat y ++ ")"
-
-
-noSelectAttribute : Svg.Attribute msg
-noSelectAttribute =
-    Svg.Attributes.style
-        (String.join "; "
-            [ "-webkit-user-select: none"
-            , "-moz-user-select: none"
-            , "-ms-user-select: none"
-            , "user-select: none"
-            ]
-        )
-
-
-coordinateLines : Point2d -> Axis2d -> Color -> Svg msg
-coordinateLines point referenceAxis color =
-    let
-        axisOrigin =
-            Axis2d.originPoint referenceAxis
-
-        projectedPoint =
-            Point2d.projectOnto referenceAxis point
-
-        parallelSegment =
-            LineSegment2d ( axisOrigin, projectedPoint )
-
-        perpendicularSegment =
-            LineSegment2d ( projectedPoint, point )
-    in
-        Svg.g
-            [ Svg.Attributes.stroke (colorString color)
-            , Svg.Attributes.strokeWidth "0.01"
-            , Svg.Attributes.strokeDasharray "0.03 0.03"
-            ]
-            [ Svg.lineSegment2d [] parallelSegment
-            , Svg.lineSegment2d [] perpendicularSegment
-            ]
-
-
 view : Model -> Html Msg
 view model =
     let
@@ -253,35 +202,6 @@ view model =
 
         ( localX, localY ) =
             Point2d.coordinates relativePoint
-
-        coordinateLabel point color =
-            let
-                ( x, y ) =
-                    Point2d.coordinates point
-
-                offset =
-                    0.1
-
-                ( anchorX, anchorType ) =
-                    if x <= BoundingBox2d.midX viewBox then
-                        ( x + offset, "start" )
-                    else
-                        ( x - offset, "end" )
-
-                mirrorAxis =
-                    Axis2d { originPoint = point, direction = Direction2d.x }
-            in
-                Svg.mirrorAcross mirrorAxis
-                    (Svg.text_
-                        [ Svg.Attributes.x (toString anchorX)
-                        , Svg.Attributes.textAnchor anchorType
-                        , Svg.Attributes.y (toString y)
-                        , Svg.Attributes.fontSize "0.2"
-                        , Svg.Attributes.fill (colorString color)
-                        , noSelectAttribute
-                        ]
-                        [ Svg.text (coordinatesString point) ]
-                    )
     in
         Html.div []
             [ scene2d viewBox
@@ -298,13 +218,13 @@ view model =
                     , Svg.g [ onMouseDown (DragStart Point) ]
                         [ point2d Orange currentPoint ]
                     ]
-                , coordinateLabel currentPoint Black
+                , coordinateLabel viewBox Black currentPoint
                 ]
             , scene2d viewBox
                 [ coordinateLines relativePoint Axis2d.x Blue
                 , frame2d Blue Frame2d.xy
                 , point2d Orange relativePoint
-                , coordinateLabel relativePoint Blue
+                , coordinateLabel viewBox Blue relativePoint
                 ]
             ]
 
