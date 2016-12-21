@@ -2,7 +2,7 @@ module Frames.Common
     exposing
         ( coordinateLabel
         , coordinateLines
-        , onMouseDown
+        , dragCircle
         )
 
 import Common exposing (..)
@@ -99,3 +99,20 @@ coordinateLabel viewBox color point =
 onMouseDown : (Mouse.Position -> msg) -> Svg.Attribute msg
 onMouseDown tag =
     Svg.Events.on "mousedown" (Decode.map tag Mouse.position)
+
+
+dragCircle : (Mouse.Position -> msg) -> Point2d -> Svg msg
+dragCircle tag point =
+    let
+        ( x, y ) =
+            Point2d.coordinates point
+    in
+        Svg.circle
+            [ Svg.Attributes.cx (toString x)
+            , Svg.Attributes.cy (toString y)
+            , Svg.Attributes.r "0.15"
+            , Svg.Attributes.stroke "none"
+            , Svg.Attributes.fill "rgba(0, 0, 0, 0)"
+            , onMouseDown tag
+            ]
+            []

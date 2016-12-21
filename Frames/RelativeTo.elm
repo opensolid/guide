@@ -195,6 +195,12 @@ view model =
         yDirection =
             Frame2d.yDirection currentFrame
 
+        xTip =
+            Point2d.placeIn currentFrame (Point2d ( 1, 0 ))
+
+        yTip =
+            Point2d.placeIn currentFrame (Point2d ( 0, 1 ))
+
         ( globalX, globalY ) =
             Point2d.coordinates currentPoint
 
@@ -206,17 +212,15 @@ view model =
                 [ coordinateLines currentPoint (Frame2d.xAxis currentFrame) Blue
                 , coordinateLines currentPoint Axis2d.x Black
                 , frame2d Black Frame2d.xy
-                , Svg.g [ Svg.Attributes.cursor "move" ]
-                    [ Svg.g [ onMouseDown (DragStart XDirection) ]
-                        [ direction2d Blue originPoint xDirection ]
-                    , Svg.g [ onMouseDown (DragStart YDirection) ]
-                        [ direction2d Blue originPoint yDirection ]
-                    , Svg.g [ onMouseDown (DragStart OriginPoint) ]
-                        [ originPoint2d Blue originPoint ]
-                    , Svg.g [ onMouseDown (DragStart Point) ]
-                        [ point2d Orange currentPoint ]
-                    ]
+                , frame2d Blue currentFrame
+                , point2d Orange currentPoint
                 , coordinateLabel viewBox Black currentPoint
+                , Svg.g [ Svg.Attributes.cursor "move" ]
+                    [ dragCircle (DragStart XDirection) xTip
+                    , dragCircle (DragStart YDirection) yTip
+                    , dragCircle (DragStart OriginPoint) originPoint
+                    , dragCircle (DragStart Point) currentPoint
+                    ]
                 ]
             , scene2d viewBox
                 [ coordinateLines relativePoint Axis2d.x Blue
