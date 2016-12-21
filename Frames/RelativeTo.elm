@@ -173,9 +173,9 @@ view model =
     let
         viewBox =
             BoundingBox2d
-                { minX = -0.75
+                { minX = -0.5
                 , minY = -1
-                , maxX = 2.75
+                , maxX = 2.5
                 , maxY = 3
                 }
 
