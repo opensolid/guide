@@ -28,7 +28,7 @@ import OpenSolid.Svg as Svg
 
 
 config =
-    { scale = 80.0
+    { scale = 100.0
     , stroke =
         { width = 0.02
         , thinWidth = 0.01
