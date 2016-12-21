@@ -2,6 +2,7 @@ module Frames.Common
     exposing
         ( coordinateLabel
         , coordinateLines
+        , onMouseDown
         )
 
 import Common exposing (..)
@@ -13,6 +14,9 @@ import OpenSolid.Direction2d as Direction2d
 import OpenSolid.Svg as Svg
 import Svg exposing (Svg)
 import Svg.Attributes
+import Svg.Events
+import Json.Decode as Decode
+import Mouse
 import Formatting exposing (Format)
 
 
@@ -90,3 +94,8 @@ coordinateLabel viewBox color point =
                 ]
                 [ Svg.text coordinatesString ]
             )
+
+
+onMouseDown : (Mouse.Position -> msg) -> Svg.Attribute msg
+onMouseDown tag =
+    Svg.Events.on "mousedown" (Decode.map tag Mouse.position)

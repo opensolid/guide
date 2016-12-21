@@ -3,7 +3,6 @@ module Frames.RelativeTo exposing (..)
 import Html exposing (Html)
 import Svg exposing (Svg)
 import Svg.Attributes
-import Svg.Events
 import OpenSolid.Geometry.Types exposing (..)
 import OpenSolid.Point2d as Point2d
 import OpenSolid.Frame2d as Frame2d
@@ -15,7 +14,6 @@ import OpenSolid.Svg as Svg
 import Common exposing (..)
 import Frames.Common exposing (..)
 import Mouse
-import Json.Decode as Decode
 
 
 type DraggedObject
@@ -227,11 +225,6 @@ view model =
                 , coordinateLabel viewBox Blue relativePoint
                 ]
             ]
-
-
-onMouseDown : (Mouse.Position -> Msg) -> Svg.Attribute Msg
-onMouseDown tag =
-    Svg.Events.on "mousedown" (Decode.map tag Mouse.position)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
