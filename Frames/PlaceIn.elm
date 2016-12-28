@@ -1,4 +1,4 @@
-module Frames.RelativeTo exposing (..)
+module Frames.PlaceIn exposing (..)
 
 import Html exposing (Html)
 import Svg exposing (Svg)
