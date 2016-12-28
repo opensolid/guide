@@ -8,11 +8,39 @@ include::../common.adoc[]
 
 == Introduction
 
-It is often necessary or useful to represent geometry data using different
-coordinate systems, and be able to transform data between those coordinate
-systems.
+In OpenSolid, most of the time we talk about a point "having the coordinates (2,
+3, 1)" or similar without thinking too much about exactly what that means.
+Really, however, every set of coordinates implicitly refers to a particular
+coordinate system or reference frame. For example, when designing a wheel hub it
+might be most convenient to use a coordinate system where `(0,0,0)` is the
+center of the hub; however, when creating a CNC toolpath to actually cut that
+hub out on a milling machine, we might have to work in a coordinate system where
+`(0,0,0)` is the resting position of the cutting tool. A given point on the hub
+would then have different numerical coordinates depending on which of those
+coordinate systems was being used.
 
-== Relative to
+It is generally simplest and easiest to work all within one common coordinate
+system whenever possible. However, for cases where it is necessary or useful to
+represent geometric data using different coordinate systems, OpenSolid provides
+ways to transform data between them. In general, these operations transform
+between global coordinates (coordinates with respect to some global or 'master'
+coordinate system) and local coordinates with respect to some other coordinate
+system.
+
+== Frames
+
+In OpenSolid, coordinate systems are defined using _frames_.  A frame in 2D
+consists of an origin point and two perpendicular directions; these define a
+local XY coordinate system. 3D frames are similar, with an additional Z
+direction perpendicular to both the X and Y directions.
+
+There are two main frame-related operations: _relative to_ and _place in_. The
+first means to take something currently in global coordinates, and express it
+relative to a particular frame. In the following example, the black text shows
+the orange point's coordinates in global space (the black frame); the blue text
+shows its coordinates relative to the local (blue) frame. Try dragging the point
+and frame around (drag the frame's origin point to move it, or its axis tips to
+rotate it) to see how the global and relative (local) coordinates change:
 
 ++++
 <div id="relativeTo"></div>
@@ -22,7 +50,15 @@ systems.
 </script>
 ++++
 
-== Place in
+The right half shows the blue frame and orange point from the point of view of
+an observer anchored to the blue frame (in which case the blue frame itself does
+not move!).
+
+The second operation is the opposite - take something currently in local
+coordinates, and place it in global coordinates. In the following example, you
+can manipulate the local (blue) coordinates of the orange point on the left
+side, the position and orientation of the blue frame on the right side, and see
+the resulting global (black) coordinates also on the right side:
 
 ++++
 <div id="placeIn"></div>
@@ -31,3 +67,9 @@ systems.
     var placeInApp = Elm.Frames.PlaceIn.embed(placeInNode);
 </script>
 ++++
+
+Note that as you drag the frame around the point follows it and has its global
+coordinates change as a result. You can think of the local frame kind of like a
+box - by placing a point in the box, the point is carried around by the box and
+its global coordinates depend on the position/orientation of the box as well as
+its local coordinates relative to the box.
