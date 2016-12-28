@@ -24,10 +24,7 @@ type DraggedObject
 
 
 type alias DragInProgress =
-    { draggedObject : DraggedObject
-    , startPosition : Mouse.Position
-    , endPosition : Mouse.Position
-    }
+    ( DraggedObject, Mouse.Position, Mouse.Position )
 
 
 type alias Model =
@@ -65,22 +62,15 @@ init =
 actualPoint : Model -> Point2d
 actualPoint model =
     case model.dragInProgress of
-        Just dragInProgress ->
-            case dragInProgress.draggedObject of
-                Point ->
-                    let
-                        displacement =
-                            dragDisplacement
-                                dragInProgress.startPosition
-                                dragInProgress.endPosition
-                    in
-                        Point2d.translateBy displacement
-                            model.point
-
-                _ ->
+        Just ( Point, startPosition, endPosition ) ->
+            let
+                displacement =
+                    dragDisplacement startPosition endPosition
+            in
+                Point2d.translateBy displacement
                     model.point
 
-        Nothing ->
+        _ ->
             model.point
 
 
@@ -103,14 +93,12 @@ rotatedFrame frame dragStartPoint dragEndPoint =
 actualFrame : Model -> Frame2d
 actualFrame model =
     case model.dragInProgress of
-        Just dragInProgress ->
+        Just ( draggedObject, startPosition, endPosition ) ->
             let
                 displacement =
-                    dragDisplacement
-                        dragInProgress.startPosition
-                        dragInProgress.endPosition
+                    dragDisplacement startPosition endPosition
             in
-                case dragInProgress.draggedObject of
+                case draggedObject of
                     OriginPoint ->
                         Frame2d.translateBy displacement model.frame
 
@@ -212,19 +200,16 @@ update msg model =
         DragStart draggedObject position ->
             let
                 newDrag =
-                    { draggedObject = draggedObject
-                    , startPosition = position
-                    , endPosition = position
-                    }
+                    ( draggedObject, position, position )
             in
                 ( { model | dragInProgress = Just newDrag }, Cmd.none )
 
         DragTo position ->
             case model.dragInProgress of
-                Just currentDrag ->
+                Just ( draggedObject, startPosition, endPosition ) ->
                     let
                         updatedDrag =
-                            { currentDrag | endPosition = position }
+                            ( draggedObject, startPosition, position )
                     in
                         ( { model | dragInProgress = Just updatedDrag }
                         , Cmd.none
