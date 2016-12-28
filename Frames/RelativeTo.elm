@@ -105,7 +105,7 @@ transformedFrame model =
                     XDirection ->
                         let
                             tipPoint =
-                                Point2d.placeIn model.frame (Point2d ( 1, 0 ))
+                                xTip model.frame
 
                             displacedTipPoint =
                                 Point2d.translateBy displacement tipPoint
@@ -115,7 +115,7 @@ transformedFrame model =
                     YDirection ->
                         let
                             tipPoint =
-                                Point2d.placeIn model.frame (Point2d ( 0, 1 ))
+                                yTip model.frame
 
                             displacedTipPoint =
                                 Point2d.translateBy displacement tipPoint
@@ -152,35 +152,26 @@ view model =
         originPoint =
             Frame2d.originPoint currentFrame
 
-        xDirection =
-            Frame2d.xDirection currentFrame
+        xTipPoint =
+            xTip currentFrame
 
-        yDirection =
-            Frame2d.yDirection currentFrame
+        yTipPoint =
+            yTip currentFrame
 
-        xTip =
-            Point2d.placeIn currentFrame (Point2d ( 1, 0 ))
-
-        yTip =
-            Point2d.placeIn currentFrame (Point2d ( 0, 1 ))
-
-        ( globalX, globalY ) =
-            Point2d.coordinates currentPoint
-
-        ( localX, localY ) =
-            Point2d.coordinates relativePoint
+        xAxis =
+            Frame2d.xAxis currentFrame
     in
         Html.div []
             [ scene2d viewBox
-                [ coordinateLines currentPoint (Frame2d.xAxis currentFrame) Blue
+                [ coordinateLines currentPoint xAxis Blue
                 , coordinateLines currentPoint Axis2d.x Black
                 , frame2d Black Frame2d.xy
                 , frame2d Blue currentFrame
                 , point2d Orange currentPoint
                 , coordinateLabel viewBox Black currentPoint
                 , Svg.g [ Svg.Attributes.cursor "move" ]
-                    [ dragCircle (DragStart XDirection) xTip
-                    , dragCircle (DragStart YDirection) yTip
+                    [ dragCircle (DragStart XDirection) xTipPoint
+                    , dragCircle (DragStart YDirection) yTipPoint
                     , dragCircle (DragStart OriginPoint) originPoint
                     , dragCircle (DragStart Point) currentPoint
                     ]
