@@ -59,8 +59,8 @@ init =
         ( initialModel, Cmd.none )
 
 
-actualPoint : Model -> Point2d
-actualPoint model =
+transformedPoint : Model -> Point2d
+transformedPoint model =
     case model.dragInProgress of
         Just ( Point, startPosition, endPosition ) ->
             let
@@ -90,8 +90,8 @@ rotatedFrame frame dragStartPoint dragEndPoint =
                 frame
 
 
-actualFrame : Model -> Frame2d
-actualFrame model =
+transformedFrame : Model -> Frame2d
+transformedFrame model =
     case model.dragInProgress of
         Just ( draggedObject, startPosition, endPosition ) ->
             let
@@ -141,10 +141,10 @@ view model =
                 }
 
         currentPoint =
-            actualPoint model
+            transformedPoint model
 
         currentFrame =
-            actualFrame model
+            transformedFrame model
 
         relativePoint =
             Point2d.relativeTo currentFrame currentPoint
@@ -220,8 +220,8 @@ update msg model =
 
         DragEnd position ->
             ( { model
-                | point = actualPoint model
-                , frame = actualFrame model
+                | point = transformedPoint model
+                , frame = transformedFrame model
                 , dragInProgress = Nothing
               }
             , Cmd.none
