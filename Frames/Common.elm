@@ -93,7 +93,7 @@ coordinateLabel viewBox color point =
                 [ Svg.Attributes.x (toString anchorX)
                 , Svg.Attributes.textAnchor anchorType
                 , Svg.Attributes.y (toString y)
-                , Svg.Attributes.fontSize "0.2"
+                , Svg.Attributes.fontSize "0.15"
                 , Svg.Attributes.fill (colorString color)
                 , noSelectAttribute
                 ]
