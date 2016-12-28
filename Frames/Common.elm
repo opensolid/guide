@@ -3,6 +3,8 @@ module Frames.Common
         ( coordinateLabel
         , coordinateLines
         , dragCircle
+        , dragDisplacement
+        , dragAngleAround
         )
 
 import Common exposing (..)
@@ -11,6 +13,7 @@ import OpenSolid.Axis2d as Axis2d
 import OpenSolid.Point2d as Point2d
 import OpenSolid.BoundingBox2d as BoundingBox2d
 import OpenSolid.Direction2d as Direction2d
+import OpenSolid.Vector2d as Vector2d
 import OpenSolid.Svg as Svg
 import Svg exposing (Svg)
 import Svg.Attributes
@@ -116,3 +119,23 @@ dragCircle tag point =
             , onMouseDown tag
             ]
             []
+
+
+dragDisplacement : Mouse.Position -> Mouse.Position -> Vector2d
+dragDisplacement dragStart dragEnd =
+    Vector2d
+        ( toFloat (dragEnd.x - dragStart.x) / pixelsPerUnit
+        , toFloat (dragStart.y - dragEnd.y) / pixelsPerUnit
+        )
+
+
+dragAngleAround : Point2d -> Point2d -> Point2d -> Maybe Float
+dragAngleAround centerPoint dragStartPoint dragEndPoint =
+    let
+        startDirection =
+            Vector2d.direction (Point2d.vectorFrom centerPoint dragStartPoint)
+
+        endDirection =
+            Vector2d.direction (Point2d.vectorFrom centerPoint dragEndPoint)
+    in
+        Maybe.map2 Direction2d.angleFrom startDirection endDirection

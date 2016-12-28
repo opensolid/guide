@@ -62,30 +62,18 @@ init =
         ( initialModel, Cmd.none )
 
 
-displaced : Point2d -> Mouse.Position -> Mouse.Position -> Point2d
-displaced basePoint dragStart dragEnd =
-    let
-        ( x, y ) =
-            Point2d.coordinates basePoint
-
-        dx =
-            toFloat (dragEnd.x - dragStart.x) / pixelsPerUnit
-
-        dy =
-            toFloat (dragStart.y - dragEnd.y) / pixelsPerUnit
-    in
-        Point2d ( x + dx, y + dy )
-
-
 actualPoint : Model -> Point2d
 actualPoint model =
     case model.dragInProgress of
         Just dragInProgress ->
             case dragInProgress.draggedObject of
                 Point ->
-                    displaced model.point
-                        dragInProgress.startPosition
-                        dragInProgress.endPosition
+                    Point2d.translateBy
+                        (dragDisplacement
+                            dragInProgress.startPosition
+                            dragInProgress.endPosition
+                        )
+                        model.point
 
                 _ ->
                     model.point
@@ -97,17 +85,10 @@ actualPoint model =
 rotatedFrame : Frame2d -> Point2d -> Point2d -> Frame2d
 rotatedFrame frame dragStartPoint dragEndPoint =
     let
-        originPoint =
-            Frame2d.originPoint frame
-
-        startDirection =
-            Vector2d.direction (Point2d.vectorFrom originPoint dragStartPoint)
-
-        endDirection =
-            Vector2d.direction (Point2d.vectorFrom originPoint dragEndPoint)
-
         rotationAngle =
-            Maybe.map2 Direction2d.angleFrom startDirection endDirection
+            dragAngleAround (Frame2d.originPoint frame)
+                dragStartPoint
+                dragEndPoint
     in
         case rotationAngle of
             Just angle ->
@@ -121,46 +102,38 @@ actualFrame : Model -> Frame2d
 actualFrame model =
     case model.dragInProgress of
         Just dragInProgress ->
-            case dragInProgress.draggedObject of
-                OriginPoint ->
-                    let
-                        displacedOrigin =
-                            displaced (Frame2d.originPoint model.frame)
-                                dragInProgress.startPosition
-                                dragInProgress.endPosition
-                    in
-                        Frame2d
-                            { originPoint = displacedOrigin
-                            , xDirection = Frame2d.xDirection model.frame
-                            , yDirection = Frame2d.yDirection model.frame
-                            }
+            let
+                displacement =
+                    dragDisplacement
+                        dragInProgress.startPosition
+                        dragInProgress.endPosition
+            in
+                case dragInProgress.draggedObject of
+                    OriginPoint ->
+                        Frame2d.translateBy displacement model.frame
 
-                XDirection ->
-                    let
-                        tipPoint =
-                            Point2d.placeIn model.frame (Point2d ( 1, 0 ))
-                    in
-                        rotatedFrame model.frame
-                            tipPoint
-                            (displaced tipPoint
-                                dragInProgress.startPosition
-                                dragInProgress.endPosition
-                            )
+                    XDirection ->
+                        let
+                            tipPoint =
+                                Point2d.placeIn model.frame (Point2d ( 1, 0 ))
 
-                YDirection ->
-                    let
-                        tipPoint =
-                            Point2d.placeIn model.frame (Point2d ( 0, 1 ))
-                    in
-                        rotatedFrame model.frame
-                            tipPoint
-                            (displaced tipPoint
-                                dragInProgress.startPosition
-                                dragInProgress.endPosition
-                            )
+                            displacedTipPoint =
+                                Point2d.translateBy displacement tipPoint
+                        in
+                            rotatedFrame model.frame tipPoint displacedTipPoint
 
-                Point ->
-                    model.frame
+                    YDirection ->
+                        let
+                            tipPoint =
+                                Point2d.placeIn model.frame (Point2d ( 0, 1 ))
+
+                            displacedTipPoint =
+                                Point2d.translateBy displacement tipPoint
+                        in
+                            rotatedFrame model.frame tipPoint displacedTipPoint
+
+                    Point ->
+                        model.frame
 
         Nothing ->
             model.frame
