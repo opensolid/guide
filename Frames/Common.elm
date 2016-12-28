@@ -4,7 +4,7 @@ module Frames.Common
         , coordinateLines
         , dragCircle
         , dragDisplacement
-        , dragAngleAround
+        , sweptAngleAround
         )
 
 import Common exposing (..)
@@ -129,13 +129,13 @@ dragDisplacement dragStart dragEnd =
         )
 
 
-dragAngleAround : Point2d -> Point2d -> Point2d -> Maybe Float
-dragAngleAround centerPoint dragStartPoint dragEndPoint =
+sweptAngleAround : Point2d -> Point2d -> Point2d -> Maybe Float
+sweptAngleAround centerPoint startPoint endPoint =
     let
         startDirection =
-            Vector2d.direction (Point2d.vectorFrom centerPoint dragStartPoint)
+            Vector2d.direction (Point2d.vectorFrom centerPoint startPoint)
 
         endDirection =
-            Vector2d.direction (Point2d.vectorFrom centerPoint dragEndPoint)
+            Vector2d.direction (Point2d.vectorFrom centerPoint endPoint)
     in
         Maybe.map2 Direction2d.angleFrom startDirection endDirection

@@ -86,7 +86,7 @@ rotatedFrame : Frame2d -> Point2d -> Point2d -> Frame2d
 rotatedFrame frame dragStartPoint dragEndPoint =
     let
         rotationAngle =
-            dragAngleAround (Frame2d.originPoint frame)
+            sweptAngleAround (Frame2d.originPoint frame)
                 dragStartPoint
                 dragEndPoint
     in
