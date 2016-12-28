@@ -5,6 +5,8 @@ module Frames.Common
         , dragCircle
         , dragDisplacement
         , sweptAngleAround
+        , xTip
+        , yTip
         )
 
 import Common exposing (..)
@@ -139,3 +141,13 @@ sweptAngleAround centerPoint startPoint endPoint =
             Vector2d.direction (Point2d.vectorFrom centerPoint endPoint)
     in
         Maybe.map2 Direction2d.angleFrom startDirection endDirection
+
+
+xTip : Frame2d -> Point2d
+xTip frame =
+    Point2d.placeIn frame (Point2d ( 1, 0 ))
+
+
+yTip : Frame2d -> Point2d
+yTip frame =
+    Point2d.placeIn frame (Point2d ( 0, 1 ))
