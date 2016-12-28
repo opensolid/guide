@@ -63,24 +63,21 @@ transformedPoint : Model -> Point2d
 transformedPoint model =
     case model.dragInProgress of
         Just ( Point, startPosition, endPosition ) ->
-            let
-                displacement =
-                    dragDisplacement startPosition endPosition
-            in
-                Point2d.translateBy displacement
-                    model.point
+            Point2d.translateBy
+                (dragDisplacement startPosition endPosition)
+                model.point
 
         _ ->
             model.point
 
 
-rotatedFrame : Frame2d -> Point2d -> Point2d -> Frame2d
-rotatedFrame frame dragStartPoint dragEndPoint =
+rotatedFrame : Frame2d -> Point2d -> Vector2d -> Frame2d
+rotatedFrame frame tipPoint tipDisplacement =
     let
         rotationAngle =
             sweptAngleAround (Frame2d.originPoint frame)
-                dragStartPoint
-                dragEndPoint
+                tipPoint
+                (Point2d.translateBy tipDisplacement tipPoint)
     in
         case rotationAngle of
             Just angle ->
@@ -103,24 +100,10 @@ transformedFrame model =
                         Frame2d.translateBy displacement model.frame
 
                     XDirection ->
-                        let
-                            tipPoint =
-                                xTip model.frame
-
-                            displacedTipPoint =
-                                Point2d.translateBy displacement tipPoint
-                        in
-                            rotatedFrame model.frame tipPoint displacedTipPoint
+                        rotatedFrame model.frame (xTip model.frame) displacement
 
                     YDirection ->
-                        let
-                            tipPoint =
-                                yTip model.frame
-
-                            displacedTipPoint =
-                                Point2d.translateBy displacement tipPoint
-                        in
-                            rotatedFrame model.frame tipPoint displacedTipPoint
+                        rotatedFrame model.frame (yTip model.frame) displacement
 
                     Point ->
                         model.frame
