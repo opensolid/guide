@@ -68,12 +68,14 @@ actualPoint model =
         Just dragInProgress ->
             case dragInProgress.draggedObject of
                 Point ->
-                    Point2d.translateBy
-                        (dragDisplacement
-                            dragInProgress.startPosition
-                            dragInProgress.endPosition
-                        )
-                        model.point
+                    let
+                        displacement =
+                            dragDisplacement
+                                dragInProgress.startPosition
+                                dragInProgress.endPosition
+                    in
+                        Point2d.translateBy displacement
+                            model.point
 
                 _ ->
                     model.point
