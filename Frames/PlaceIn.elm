@@ -44,7 +44,7 @@ init : ( Model, Cmd Msg )
 init =
     let
         initialPoint =
-            Point2d ( 1.5, 0.5 )
+            Point2d ( 0.5, -0.75 )
 
         initialFrame =
             Frame2d.at (Point2d ( 0.75, 0.75 ))
