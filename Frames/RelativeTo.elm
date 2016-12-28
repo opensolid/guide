@@ -120,7 +120,7 @@ view model =
                 { minX = -0.5
                 , minY = -1
                 , maxX = 2.5
-                , maxY = 3
+                , maxY = 2.5
                 }
 
         currentPoint =

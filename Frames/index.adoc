@@ -2,8 +2,32 @@
 Ian Mackenzie
 include::../common.adoc[]
 
+++++
+<script src="main.js"></script>
+++++
+
 == Introduction
 
 It is often necessary or useful to represent geometry data using different
 coordinate systems, and be able to transform data between those coordinate
 systems.
+
+== Relative to
+
+++++
+<div id="relativeTo"></div>
+<script>
+    var relativeToNode = document.getElementById('relativeTo');
+    var relativeToApp = Elm.Frames.RelativeTo.embed(relativeToNode);
+</script>
+++++
+
+== Place in
+
+++++
+<div id="placeIn"></div>
+<script>
+    var placeInNode = document.getElementById('placeIn');
+    var placeInApp = Elm.Frames.PlaceIn.embed(placeInNode);
+</script>
+++++
