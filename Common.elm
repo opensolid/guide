@@ -104,7 +104,7 @@ scene2d boundingBox elements =
             Frame2d
                 { originPoint = Point2d ( minX, maxY )
                 , xDirection = Direction2d.x
-                , yDirection = Direction2d.negate Direction2d.y
+                , yDirection = Direction2d.flip Direction2d.y
                 }
 
         globalAttributes =
