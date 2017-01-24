@@ -119,13 +119,8 @@ scene2d boundingBox elements =
 
 point2d : Color -> Point2d -> Svg msg
 point2d color point =
-    let
-        attributes =
-            [ Attributes.fill (colorString color)
-            , Attributes.r (toString config.point.radius)
-            ]
-    in
-        Svg.point2d attributes point
+    Svg.circle2d [ Attributes.fill (colorString color) ]
+        (Circle2d { centerPoint = point, radius = config.point.radius })
 
 
 centerPoint2d : Color -> Point2d -> Svg msg
@@ -143,20 +138,21 @@ centerPoint2d color point =
                 , Point2d ( 0, config.centerPoint.crossRadius )
                 )
 
-        pointAttributes =
-            [ Attributes.fill (colorString color)
-            , Attributes.r (toString config.centerPoint.radius)
-            ]
-
-        lineAttributes =
-            [ Attributes.stroke (colorString color)
-            , Attributes.strokeWidth (toString config.stroke.thinWidth)
-            ]
+        circle =
+            Circle2d
+                { centerPoint = Point2d.origin
+                , radius = config.centerPoint.radius
+                }
     in
         Svg.g []
-            [ Svg.point2d pointAttributes Point2d.origin
-            , Svg.lineSegment2d lineAttributes verticalLine
-            , Svg.lineSegment2d lineAttributes horizontalLine
+            [ Svg.circle2d [ Attributes.fill (colorString color) ] circle
+            , Svg.g
+                [ Attributes.stroke (colorString color)
+                , Attributes.strokeWidth (toString config.stroke.thinWidth)
+                ]
+                [ Svg.lineSegment2d [] verticalLine
+                , Svg.lineSegment2d [] horizontalLine
+                ]
             ]
             |> Svg.placeIn (Frame2d.at point)
 
@@ -167,11 +163,13 @@ originPoint2d color point =
         attributes =
             [ Attributes.fill "white"
             , Attributes.stroke (colorString color)
-            , Attributes.r (toString config.originPoint.radius)
             , Attributes.strokeWidth (toString config.stroke.thinWidth)
             ]
+
+        circle =
+            Circle2d { centerPoint = point, radius = config.originPoint.radius }
     in
-        Svg.point2d attributes point
+        Svg.circle2d attributes circle
 
 
 direction2d : Color -> Point2d -> Direction2d -> Svg msg
